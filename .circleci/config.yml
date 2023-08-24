@@ -43,7 +43,6 @@ jobs:
           key: frontend-test
                 
 workflows:
-  default:
     jobs:
       - build-frontend
       - build-backend 
