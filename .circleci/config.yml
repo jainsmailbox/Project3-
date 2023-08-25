@@ -201,7 +201,7 @@ jobs:
             npm install
             npm run migrations > migrations_dump.txt
       - run:
-          name: send migration to memstash
+          name: send migration to kvdb
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
