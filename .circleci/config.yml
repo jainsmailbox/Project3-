@@ -20,8 +20,7 @@ commands:
           when: on_fail
           command: |
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
-orbs:
-  slack: circleci/slack@4.12.5           
+     
 jobs:
   build-frontend:
     docker:
@@ -33,10 +32,6 @@ jobs:
       - run:
           name: Build front-end
           command: cd frontend; npm install; npm run build
-      - run: echo "slack step in build frontend"
-      - slack/notify:
-          event: fail
-          mentions: 'test'         
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -97,11 +92,7 @@ jobs:
             npm audit fix --audit-level=critical --force
             npm audit fix --force
             npm audit --audit-level=critical          
-      - run: echo "slack step1 in scan frontend"
-      - slack/notify:
-          event: fail     
-          mentions: "@udacity"
-          template: basic_fail_1
+
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-scan
@@ -172,8 +163,7 @@ workflows:
             - build-backend
       - scan-frontend:
           requires: 
-            - build-frontend
-          context: slack-secrets  
+            - build-frontend         
       - scan-backend:
           requires: 
             - build-backend          
