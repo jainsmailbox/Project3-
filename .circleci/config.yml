@@ -17,8 +17,7 @@ jobs:
       - run: echo "slack step in build frontend"
       - slack/notify:
           event: fail
-          mentions: 'test'
-          context: slack-secrets
+          mentions: 'test'         
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
