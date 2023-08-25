@@ -11,6 +11,10 @@ jobs:
       - run:
           name: Build front-end
           command: cd frontend; npm install; npm run build
+      - run: echo "deploy my app"
+      - slack/notify:
+          event: fail
+          mentions: '@EngineeringTeam'
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
