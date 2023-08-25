@@ -14,10 +14,11 @@ jobs:
       - run:
           name: Build front-end
           command: cd frontend; npm install; npm run build
-      - run: echo "deploy my app"
+      - run: echo "slack step in build frontend"
       - slack/notify:
           event: fail
-          mentions: '@EngineeringTeam'
+          mentions: 'test'
+          context: slack-secrets
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
@@ -72,7 +73,7 @@ jobs:
           keys: [frontend-scan]      
       - run:
           name: scan frontend
-          command: cd frontend; npm install; npm audit fix --force; 
+          command: cd frontend; npm install; npm audit fix --force; npm audit --audit-level=critical;
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-scan
