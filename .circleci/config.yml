@@ -149,7 +149,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment
-  confugure-infrastructure:
+  configure-infrastructure:
     docker:
       - image: cimg/base:stable
     steps:
@@ -224,7 +224,7 @@ workflows:
             - build-backend          
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      - confugure-infrastructure:          
+      - configure-infrastructure:          
           requires: 
             - deploy-infrastructure
       - run-migrations:          
