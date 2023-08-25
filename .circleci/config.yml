@@ -73,6 +73,9 @@ jobs:
       - run:
           name: scan frontend
           command: cd frontend; npm install; npm audit fix --force; npm audit --audit-level=critical;
+      - run: echo "slack step in build frontend"
+      - slack/notify:
+          event: fail          
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-scan
