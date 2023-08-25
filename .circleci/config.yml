@@ -1,8 +1,10 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.5  
+  slack: circleci/slack@4.12.5
+
 commands:
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks and S3 bucket given a workflow ID.
     parameters:
@@ -21,7 +23,7 @@ commands:
           when: on_fail
           command: |
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
-            
+           
 jobs:
   build-frontend:
     docker:
