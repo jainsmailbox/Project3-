@@ -7,10 +7,18 @@
   become: true
   apt:
     upgrade: "yes"
+   
+- name: "copy the code into ec2 instance"
+  become: yes
+  synchronize:
+    src: /root/project/backend
+    dest: /home/ubuntu
+    recursive: true
+
 - name: "install dependencies1"
   become: true
   apt:
-    name: ["nodejs", "npm"]
+    name: ["npm","nodejs"]
     state: latest
     update_cache: yes
 - name: "install pm2"
@@ -20,14 +28,6 @@
     global: yes
     production: yes
     state: present
-    
-- name: "copy the code into ec2 instance"
-  become: yes
-  synchronize:
-    src: /root/project/backend
-    dest: /home/ubuntu
-    recursive: true
-
 - name: "change ownership of node modules"
   become: yes
   shell: |
