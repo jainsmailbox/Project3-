@@ -13,12 +13,17 @@
   become: true
   apt:
     autoremove: yes
-
-- name: "install dependencies [nodejs and npm]."
+    
+- name: "Copy artifact into Instance" 
   become: true
+  copy:
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/artifact.tar.gz
+
+- name: "install nodejs
   apt:
-    name: ["nodejs", "npm"]
-    state: latest
+    name: nodejs
+    state: present
     update_cache: yes
 
 - name: "install pm2"
@@ -28,13 +33,6 @@
     global: yes
     production: yes
     state: present
-
-- name: "Copy artifact into Instance" 
-  become: true
-  copy:
-    src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/artifact.tar.gz
-
 
 - name: "Start app"
   become: true
