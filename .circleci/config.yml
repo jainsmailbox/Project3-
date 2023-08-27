@@ -257,6 +257,16 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:         
+         fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]
+      # attach workspace
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update --no-cache ansible tar gzip nodejs npm curl aws-cli
 
   
 workflows:
