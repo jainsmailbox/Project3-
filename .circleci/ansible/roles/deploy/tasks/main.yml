@@ -9,7 +9,7 @@
   apt:
     upgrade: yes
 
-- name: "remove stale dependencies"
+- name: "remove stale dependencies1"
   become: true
   apt:
     autoremove: yes
