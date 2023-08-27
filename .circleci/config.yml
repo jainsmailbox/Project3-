@@ -251,34 +251,34 @@ jobs:
 #      - destroy-environment
   deploy-backend:
     docker:
-      # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      - image: cimg/base:stable
     steps:
-      # Checkout code from git
       - checkout
-      # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]
-      # attach workspace
-      - attach_workspace: 
-            at: ~/
+      - attach_workspace:
+          at: ~/          
       - run:
-          name: Install dependencies
+          name: install awscli
           command: |
-            # your code here
-            apk add --update ansible curl rsync openssh nodejs npm
-            pip install awscli
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install                
       - run:
-          name: Deploy backend
-          no_output_timeout: 25m
+          name: Install Ansible
           command: |
-            # your code here
-            cd ~/project/.circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
+      - run:
+          name: deploy backend
+          command: |
+            cd .circleci/ansible
             cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
+            ansible-playbook -i inventory.txt deploy-backend.yml            
             
-      - destroy-environment           
+      - destroy-environment
 workflows:
  default:
     jobs:
