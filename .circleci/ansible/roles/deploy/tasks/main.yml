@@ -56,7 +56,6 @@
   args:
     chdir: /home/ubuntu/backend/dist
 
-
   environment:
   #Environement Variables and Values
     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
