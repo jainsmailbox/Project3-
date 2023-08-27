@@ -250,37 +250,6 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 #      - destroy-environment
 
-  deploy-backend:
-    docker:
-      # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
-    steps:
-      # Checkout code from git
-      - checkout
-      # Add ssh keys with fingerprint
-      - add_ssh_keys:
-          fingerprints: ["0c:55:f7:d7:ad:e3:73:19:0b:e6:c6:46:5c:04:76:94"] 
-      # attach workspace
-      - attach_workspace: 
-            at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            apk add --update ansible curl rsync openssh nodejs npm
-            pip install awscli
-      - run:
-          name: Deploy backend
-          no_output_timeout: 25m
-          command: |
-            # your code here
-            cd ~/project/.circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            ansible-playbook -i inventory.txt deploy-backend.yml
-      # Here's where you will add some code to rollback on failure
-      - destroy-environment:
-      
            
 workflows:
  default:
