@@ -14,23 +14,25 @@
   apt:
     autoremove: yes
     
-- name: "Copy artifact into Instance" 
-  become: true
+
+
+- name: "copy files from CircleCI to server"
   copy:
-    src: ~/project/artifact.tar.gz
-    dest: /home/ubuntu/artifact.tar.gz
+    src: /root/project/backend
+    dest: /home/ubuntu
 
-
+- name: "install package dependencies"
+  shell: |
+    cd /home/ubuntu/backend    
+    npm install 
+    npm run build
 
 - name: "Start app"
   become: true
   shell: |
     cd /home/ubuntu
-    tar xzvf artifact.tar.gz
-    npm install
-    npm run build
     pm2 stop all
-    pm2 start npm -- start
+    pm2 start npm -- run "start:dev"
 
   environment:
   #Environement Variables and Values
