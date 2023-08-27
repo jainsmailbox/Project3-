@@ -254,10 +254,6 @@ jobs:
       - image: python:3.7-alpine3.11
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]        
-      - attach_workspace:
-          at: ~/                  
       - run:
           name: install dependencies 
           command: |
@@ -278,6 +274,10 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
+      - add_ssh_keys:
+          fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]        
+      - attach_workspace:
+          at: ~/                             
       - run:
           name: deploy backend objects 
           command: |
@@ -299,7 +299,7 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-  #    - destroy-environment
+      - destroy-environment
 
       
            
