@@ -1,61 +1,38 @@
 ---
-- name: "create directory1"
-  file:
-    path: /home/ubuntu/backend
-    state: directory
-- name: "upgrade packages."
+- name: 'update and upgrade packages.'
   become: true
   apt:
-    upgrade: "yes"
-   
-- name: "copy the code into ec2 instance"
-  become: yes
-  synchronize:
-    src: /root/project/backend
-    dest: /home/ubuntu
-    recursive: true
-
-- name: "install dependencies1"
+    upgrade: true
+    update_cache: true
+    cache_valid_time: 86400
+- name: remove unneeded deps
   become: true
   apt:
-    name: ["npm","nodejs"]
+    autoremove: true
+- name: install deps
+  become: true
+  apt:
+    name: ['nodejs', 'npm']
     state: latest
-    update_cache: yes
-- name: "install pm2"
+    update_cache: true
+- name: install pm2
   become: true
   npm:
     name: pm2
-    global: yes
-    production: yes
-    state: present
-- name: "change ownership of node modules"
-  become: yes
-  shell: |
-    sudo chown -R ubuntu: backend
-    sudo chmod -R a+rwx backend
-  args:
-    chdir: /home/ubuntu
+    global: true
+    state: latest
+    production: true
+- name: extract artifact
+  become: true
+  unarchive:
+    src: files/artifact.tar.gz
+    dest: .
 
-- name: "install npm packages"
+- name: start app
   become: true
   shell: |
-    npm install
-    npm run build
-  args:
-    chdir: /home/ubuntu/backend
-
-- name: "compile npm packages"
-  become: true
-  command: npm run build
-  args:
-    chdir: /home/ubuntu/backend
-
-- name: "start the code"
-  become: true
-  shell: |
-    pm2 start -f ./main.js
-  args:
-    chdir: /home/ubuntu/backend/dist
+    pm2 delete all
+    pm2 start npm -- start
 
   environment:
   #Environement Variables and Values
