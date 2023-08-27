@@ -1,35 +1,57 @@
 ---
-- name: 'update and upgrade packages.'
+- name: "create directory"
+  file:
+    path: /home/ubuntu/backend
+    state: directory
+- name: "upgrade packages."
   become: true
   apt:
-    upgrade: true
-    update_cache: true
-    cache_valid_time: 86400
-- name: remove unneeded deps
+    upgrade: "yes"
+- name: "install dependencies."
   become: true
   apt:
-    autoremove: true
-- name: install deps
-  become: true
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-    update_cache: true
-- name: install pm2
+    name: ["nodejs", "npm"]
+    update_cache: yes
+- name: "install pm2"
   become: true
   npm:
     name: pm2
-    global: true
-    state: latest
-    production: true
-- name: extract artifact
-  become: true
-  unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+    global: yes
+    production: yes
+    state: present
+    
+- name: "copy the code into ec2 instance"
+  become: yes
+  synchronize:
+    src: /root/project/backend
+    dest: /home/ubuntu
+    recursive: true
 
-- name: start app
+- name: "change ownership of node modules"
+  become: yes
+  shell: |
+    sudo chown -R ubuntu: backend
+    sudo chmod -R a+rwx backend
+  args:
+    chdir: /home/ubuntu
+
+- name: "install npm packages"
   become: true
   shell: |
-    pm2 delete all
-    pm2 start npm -- start
+    npm install
+    npm run build
+  args:
+    chdir: /home/ubuntu/backend
+
+- name: "compile npm packages"
+  become: true
+  command: npm run build
+  args:
+    chdir: /home/ubuntu/backend
+
+- name: "start the code"
+  become: true
+  shell: |
+    pm2 start -f ./main.js
+  args:
+    chdir: /home/ubuntu/backend/dist
