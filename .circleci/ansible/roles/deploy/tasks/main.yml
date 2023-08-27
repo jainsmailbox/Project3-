@@ -1,37 +1,49 @@
 ---
-- name: 'update and upgrade packages.'
+- name: "update local apt repo."
   become: true
   apt:
-    upgrade: true
-    update_cache: true
-    cache_valid_time: 86400
-- name: remove unneeded deps
+    update_cache: yes
+
+- name: "upgrade apt packages"
   become: true
   apt:
-    autoremove: true
-- name: install deps
+    upgrade: yes
+
+- name: "remove stale dependencies"
   become: true
   apt:
-    name: ['nodejs', 'npm']
+    autoremove: yes
+
+- name: "install dependencies [nodejs and npm]."
+  become: true
+  apt:
+    name: ["nodejs", "npm"]
     state: latest
-    update_cache: true
-- name: install pm2
+    update_cache: yes
+
+- name: "install pm2"
   become: true
   npm:
     name: pm2
-    global: true
-    state: latest
-    production: true
-- name: extract artifact
-  become: true
-  unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+    global: yes
+    production: yes
+    state: present
 
-- name: start app
+- name: "Copy artifact into Instance" 
+  become: true
+  copy:
+    src: ~/project/artifact.tar.gz
+    dest: /home/ubuntu/artifact.tar.gz
+
+
+- name: "Start app"
   become: true
   shell: |
-    pm2 delete all
+    cd /home/ubuntu
+    tar xzvf artifact.tar.gz
+    npm install
+    npm run build
+    pm2 stop all
     pm2 start npm -- start
 
   environment:
