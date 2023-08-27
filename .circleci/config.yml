@@ -265,13 +265,7 @@ jobs:
             apk add --no-cache --upgrade bash
             apk add --no-cache --update npm
             pip3 install awscli
-      - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common -y
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible -y
+            apk add --no-cache --update tar gzip nodejs ansible
 
       - run:
           name: get backend url
