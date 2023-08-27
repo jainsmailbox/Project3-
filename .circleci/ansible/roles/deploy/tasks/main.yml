@@ -20,7 +20,7 @@
     src: ~/project/artifact.tar.gz
     dest: /home/ubuntu/artifact.tar.gz
 
-- name: "install nodejs
+- name: "install nodejs"
   apt:
     name: nodejs
     state: present
