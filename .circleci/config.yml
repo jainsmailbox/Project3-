@@ -272,8 +272,18 @@ jobs:
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
       - run:
+          name: install dependencies1 
+          command: |
+            apk add --no-cache curl
+            apk add --no-cache --upgrade bash
+            apk add --no-cache --update npm
+      - run:
           name: deploy backend
           command: |
+            cd backend
+            npm i
+            npm run build
+            tar -C backend -czvf artifact.tar.gz .          
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml            
