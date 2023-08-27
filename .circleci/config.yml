@@ -44,7 +44,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: echo environment variables
+          name: echo environment variables1
           command: |
             echo ${TYPEORM_HOST}            
       - run:
