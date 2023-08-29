@@ -1,5 +1,5 @@
 ---
-- name: "copy the code into ec2 instance" 
+- name: "copy the code into ec2 instance1" 
   copy:
     src: /root/project/backend
     dest: /home/ubuntu
