@@ -27,7 +27,7 @@ commands:
       # Add parameter here     
     steps:
       - run:
-          name: Revert migrations2
+          name: Revert migrations
           # Add when this will run
           when: on_fail
           command: |
