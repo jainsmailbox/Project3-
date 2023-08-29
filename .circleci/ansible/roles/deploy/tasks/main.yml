@@ -1,20 +1,14 @@
 ---
-- name: "create directory"
-  file:
-    path: /home/ubuntu/backend
-    state: directory
+- name: "copy the code into ec2 instance" 
+  copy:
+    src: /root/project/backend
+    dest: /home/ubuntu
+
 - name: "upgrade packages."
   become: true
   apt:
     upgrade: "yes"
     
-- name: "copy the code into ec2 instance"
-  become: yes
-  synchronize:
-    src: /root/project/backend
-    dest: /home/ubuntu
-    recursive: true
-
 - name: "change ownership of node modules"
   become: yes
   shell: |
@@ -27,7 +21,7 @@
   become: true
   shell: |
     npm install
-    npm run build
+#    npm run build
   args:
     chdir: /home/ubuntu/backend
 
