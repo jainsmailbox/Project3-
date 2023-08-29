@@ -16,11 +16,17 @@
     
 
 
-- name: "copy files from CircleCI to server"
-  copy:
-    src: /root/project/backend
-    dest: /home/ubuntu
+#- name: "copy files from CircleCI to server"
+ # copy:
+#    src: /root/project/backend
+#    dest: /home/ubuntu
 
+- name: extract artifact
+  become: true
+  unarchive:
+    src: /root/project/backend/artifact.tar.gz
+    dest: /home/ubuntu
+    
 - name: "install package dependencies"
   shell: |
     cd /home/ubuntu/backend    
