@@ -20,31 +20,28 @@ commands:
           when: on_fail
           command: |
             aws s3 rm s3://udapeople-<<parameters.Workflow_ID>> --recursive
-
+  
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     steps:
       - run:
-          name: revert mig
+          name: Revert migrations
           # Add when this will run
           when: on_fail
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             #Read more about this
-      #      SUCCESS=$(curl -k https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
-           
-            echo "test echo"
-       #     echo $SUCCESS
+            #SUCCESS=$(curl -k https://kvdb.io/RwYjzkpo1Ze5cvbM7bK1g6/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            #echo $SUCCESS
             
-       #     if(( $SUCCESS==1 ))
-       #     then
-            cd ~/project/backend
-            npm install
-      #      Add revert code here. You can find this in the Getting Started section.
-            npm run migrations:revert
-            echo "before exit 1"
+            #if(( $SUCCESS==1 )); 
+            #then
+              cd ~/project/backend
+              npm install
+            #Add revert code here. You can find this in the Getting Started section.
+              npm run migrations:revert
               #exit 1
-       #     fi
+            #fi
 
      
 jobs:
@@ -342,6 +339,7 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
+            echo "API_URL = ${API_URL}"
             if curl "${API_URL}" | grep "ok"
             then
               exit 0
