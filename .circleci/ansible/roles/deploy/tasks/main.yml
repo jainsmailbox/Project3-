@@ -3,22 +3,6 @@
   file:
     path: /home/ubuntu/backend
     state: directory
-- name: "upgrade packages."
-  become: true
-  apt:
-    upgrade: "yes"
-- name: "install dependencies."
-  become: true
-  apt:
-    name: ["nodejs", "npm"]
-    update_cache: yes
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
     
 - name: "copy the code into ec2 instance"
   become: yes
@@ -27,19 +11,19 @@
     dest: /home/ubuntu
     recursive: true
 
-- name: "change ownership of node modules"
-  become: yes
-  shell: |
-    sudo chown -R ubuntu: backend
-    sudo chmod -R a+rwx backend
-  args:
-    chdir: /home/ubuntu
+#- name: "change ownership of node modules"
+#  become: yes
+#  shell: |
+#    sudo chown -R ubuntu: backend
+#    sudo chmod -R a+rwx backend
+#  args:
+#    chdir: /home/ubuntu
 
 - name: "install npm packages"
   become: true
   shell: |
     npm install
-    npm run build
+#    npm run build
   args:
     chdir: /home/ubuntu/backend
 
