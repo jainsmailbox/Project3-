@@ -14,7 +14,7 @@ commands:
     steps:
            
       - run:
-          name: Destroy environments
+          name: Destroy environments1
           when: on_fail
           command: |
             # Your code here
