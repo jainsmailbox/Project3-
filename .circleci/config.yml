@@ -377,7 +377,7 @@ jobs:
             pip install awscli
       - run:
           name: Deploy backend
-          no_output_timeout: 25m
+          no_output_timeout: 20m
           command: |
             # your code here
             cd ~/project/.circleci/ansible
