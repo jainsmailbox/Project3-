@@ -51,7 +51,7 @@ commands:
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
             #Read more about this
-            SUCCESS=$(curl -k https://kvdb.io/RwYjzkpo1Ze5cvbM7bK1g6/migration_${CIRCLE_WORKFLOW_ID:0:7})
+            SUCCESS=$(curl -k https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
             echo $SUCCESS
             
             if(( $SUCCESS==1 )); 
@@ -245,7 +245,7 @@ jobs:
             pip3 install awscli 
             
       - add_ssh_keys:
-          fingerprints: ["0c:55:f7:d7:ad:e3:73:19:0b:e6:c6:46:5c:04:76:94"] 
+          fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]
       # attach workspace
       - attach_workspace: 
             at: ~/
@@ -295,10 +295,10 @@ jobs:
             if grep -q "No migrations are pending" migrations.txt
             then
               echo "Migration is successful"
-              curl -k -d '1' https://kvdb.io/RwYjzkpo1Ze5cvbM7bK1g6/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -k -d '1' https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}
             else
               echo "Failure"
-              curl -k -d '0' https://kvdb.io/RwYjzkpo1Ze5cvbM7bK1g6/migration_${CIRCLE_WORKFLOW_ID:0:7}
+              curl -k -d '0' https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7}
             fi                              
      # Here's where you will add some code to rollback on failure      
       - destroy-environment:
@@ -365,7 +365,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["0c:55:f7:d7:ad:e3:73:19:0b:e6:c6:46:5c:04:76:94"] 
+          fingerprints: ["56:26:ae:a6:89:f2:81:e9:47:db:4b:69:b3:79:97:3c"]
       # attach workspace
       - attach_workspace: 
             at: ~/
